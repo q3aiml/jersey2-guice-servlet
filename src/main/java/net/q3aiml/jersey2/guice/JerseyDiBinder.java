@@ -40,7 +40,12 @@ public class JerseyDiBinder extends AbstractBinder {
 
         @Override
         public Injector provide() {
-            return (Injector)servletContext.getAttribute(Injector.class.getName());
+            Injector injector = (Injector)servletContext.getAttribute(Injector.class.getName());
+            if (injector == null) {
+                throw new NullPointerException("Unable to get injector from servlet context. "
+                        + "Ensure that you are extending GuiceServletContextListener.");
+            }
+            return injector;
         }
 
         @Override
